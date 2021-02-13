@@ -10,7 +10,8 @@ export const store = new Vuex.Store({
 
         ],
         favoriteVideos: [],
-        searchString: "animals"
+        searchString: "animals",
+        accessToken: ""
     },
     getters: {
 

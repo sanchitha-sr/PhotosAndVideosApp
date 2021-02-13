@@ -1,5 +1,6 @@
 <template>
   <div class="favorites">
+    <h3 v-if="nullVideos">No favorites added</h3>
     <el-row :gutter="10" class="image-block">
       <el-col
         class="image-col"
@@ -68,6 +69,12 @@ export default {
     },
     favoriteVideos() {
       return this.$store.state.favoriteVideos;
+    },
+    nullVideos() {
+      return (
+        this.$store.state.favorites === 0 &&
+        this.$store.state.favoriteVideos === 0
+      );
     },
   },
   data() {

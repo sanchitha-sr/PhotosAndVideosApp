@@ -10,7 +10,7 @@
         <div class="image-card">
           <el-image
             class="video-image"
-            @click="openTheVideo(image.video_files[0].link)"
+            @click="openTheVideo(image)"
             :src="image.image"
           ></el-image>
           <div class="overlay">
@@ -91,7 +91,7 @@ export default {
         },
       });
 
-      console.log(video);
+      // console.log(video);
     },
   },
   mounted() {
