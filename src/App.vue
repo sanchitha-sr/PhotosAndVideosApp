@@ -11,15 +11,16 @@
         </center>
       </h1>
       <h3><center class="my-text">Best Memories online</center></h3>
-      <el-form class="search-form">
+      <el-form ref="form" :model="form" class="search-form">
         <el-form-item>
           <el-input
+            v-model="searchedString"
             class="el-input"
             placeholder="Search photos, videos, artists"
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="danger">Search</el-button>
+          <el-button @click="searchTheImages()" type="danger">Search</el-button>
         </el-form-item>
       </el-form>
     </el-menu>
@@ -52,9 +53,16 @@ export default {
       src:
         "https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
       activeIndex: "1",
+      searchedString: "",
     };
   },
   components: {},
+  methods: {
+    searchTheImages() {
+      console.log(this.searchedString);
+      // this.getTheImages();
+    },
+  },
 };
 </script>
 <style>
@@ -78,12 +86,6 @@ export default {
 
 .my-text {
   color: white;
-}
-
-.search-form {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
 }
 
 .navigation-bar {

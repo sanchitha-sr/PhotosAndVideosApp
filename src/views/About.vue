@@ -2,7 +2,7 @@
   <div class="about">
     <el-row :gutter="20" class="image-block">
       <el-col class="image" :span="5" v-for="image in myVideos" :key="image.id">
-        <el-image :src="image.image"> </el-image>
+        <el-image :src="image.image"></el-image>
       </el-col>
     </el-row>
   </div>

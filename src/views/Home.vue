@@ -11,6 +11,7 @@
 <script>
 // @ is an alias to /src
 // import Home from "@/components/HelloWorld.vue";
+import axios from "axios";
 
 export default {
   data() {
@@ -226,6 +227,25 @@ export default {
   components: {},
   methods: {
     printMyImages() {},
+    searchTheImages() {
+      const url =
+        "https://api.pexels.com/v1/search?query=" +
+        this.searchedString +
+        "&per_page=" +
+        20;
+      const access_token =
+        "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692";
+      axios
+        .get(url, {
+          headers: {
+            Authorization: `${access_token}`,
+          },
+        })
+        .then((data) => {
+          console.log(data);
+        });
+    },
+    getTheImages() {},
   },
 };
 </script>
