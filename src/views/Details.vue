@@ -1,6 +1,6 @@
 <template>
   <div class="details">
-    <el-card>
+    <el-card v-if="this.$route.query.image">
       <div slot="header" class="clearfix">
         <div class="text-block">
           <span class="icons">
@@ -35,6 +35,30 @@
         <el-image :src="detailedImage"> </el-image>
       </div>
     </el-card>
+    <el-card>
+      <div slot="header" class="clearfix">
+        <div class="text-block">
+          <span class="icons">
+            <el-button :disabled="favoriteFlag" type="danger">
+              <i class="far fa-heart fa-1x"></i
+            ></el-button>
+
+            <span class="zoom-icons"> </span>
+          </span>
+          <span class="photographer">
+            <el-avatar size="small" icon="el-icon-user-solid"></el-avatar>
+            <span style="padding-left: 6px; line-height: 2">{{
+              videoGragher
+            }}</span>
+          </span>
+        </div>
+      </div>
+      <video width="70%" controls>
+        <source :src="detailedVideo" type="video/mp4" />
+        <source :src="detailedVideo" type="video/ogg" />
+        Your browser does not support HTML video.
+      </video>
+    </el-card>
   </div>
 </template>
 
@@ -45,12 +69,17 @@ export default {
     return {
       photographer: this.$route.query.photographer,
       favoriteFlag: false,
-      detailedImage: this.$route.query.image.large,
+      detailedImage: this.$route.query.image
+        ? this.$route.query.image.large
+        : "",
+      detailedVideo: this.$route.query.videoURL,
+      videoGragher: this.$route.query.photographer,
     };
   },
   methods: {
     addToFavorite() {
       this.favoriteFlag = true;
+      // this.$store.commit("addToFavorites", item);
     },
     zoomIn() {
       this.detailedImage = this.$route.query.image.original;
@@ -71,6 +100,10 @@ export default {
   z-index: 1;
 }
 
+.clearfix {
+  height: 20px;
+}
+
 .details {
   text-align: center;
 }
@@ -78,6 +111,7 @@ export default {
 .photographer {
   display: flex;
   flex-direction: row;
+  padding-top: 2%;
 }
 
 .zoom-icons {

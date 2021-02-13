@@ -83,7 +83,13 @@ export default {
       console.log(this.$store.state.favoriteVideos);
     },
     openTheVideo(video) {
-      this.$router.push({ path: "/details", query: { videoURL: video } });
+      this.$router.push({
+        path: "/details",
+        query: {
+          videoURL: video.video_files[1].link,
+          photographer: video.user.name,
+        },
+      });
 
       console.log(video);
     },
