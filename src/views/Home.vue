@@ -1,19 +1,34 @@
 <template>
   <div class="home">
-    <el-row :gutter="20" class="image-block">
-      <el-col class="image" :span="5" v-for="image in myImages" :key="image.id">
-        <el-image :src="image.src.medium"> </el-image>
+    {{ string }}
+    <el-row :gutter="10" class="image-block">
+      <el-col
+        class="image-col"
+        :span="5"
+        v-for="image in myImages"
+        :key="image.id"
+      >
+        <div class="image-card">
+          <el-image
+            @click="openTheImage(image.src.landscape)"
+            class="image"
+            :src="image.src.landscape"
+          >
+          </el-image>
+          <div class="overlay">
+            <span class="photographer"> {{ image.photographer }}</span>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import Home from "@/components/HelloWorld.vue";
 import axios from "axios";
 
 export default {
+  props: ["string"],
   data() {
     return {
       myImages: [
@@ -221,16 +236,19 @@ export default {
           },
         },
       ],
+      searchString:
+        this.getTheSearchString === undefined
+          ? "animals"
+          : this.getTheSearchString,
     };
   },
   name: "Home",
-  components: {},
+
   methods: {
-    printMyImages() {},
     searchTheImages() {
       const url =
         "https://api.pexels.com/v1/search?query=" +
-        this.searchedString +
+        this.searchString +
         "&per_page=" +
         20;
       const access_token =
@@ -241,21 +259,59 @@ export default {
             Authorization: `${access_token}`,
           },
         })
-        .then((data) => {
-          console.log(data);
+        .then((res) => {
+          console.log(res);
+          this.myImages = res.data.photos;
         });
     },
-    getTheImages() {},
+    openTheImage(image) {
+      console.log(image);
+      this.$router.push({ path: "/details", query: { image: image } });
+    },
+  },
+  computed: {
+    getTheSearchString() {
+      return this.$route.query.string;
+    },
+  },
+  mounted() {
+    this.searchTheImages();
+    console.log(this.$route);
   },
 };
 </script>
+
+
+
 <style scoped >
-.image {
+.image-col {
   margin-bottom: 2%;
+}
+.overlay {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.photographer {
+  line-height: 3;
+  font-size: 9px;
+  margin-left: 3px;
+  color: grey;
 }
 
 .image-block {
-  margin: 3% 0% 3% 0%;
+  margin: 0.5% 0% 3% 0%;
   left: 90px;
+}
+
+.image-card {
+  border-radius: 2px;
+  padding: 1px;
+  box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.image:hover {
+  cursor: pointer;
 }
 </style>

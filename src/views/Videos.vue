@@ -1,16 +1,36 @@
 <template>
-  <div class="about">
-    <el-row :gutter="20" class="image-block">
-      <el-col class="image" :span="5" v-for="image in myVideos" :key="image.id">
-        <el-image :src="image.image"></el-image>
+  <div class="Videos">
+    <el-row :gutter="10" class="image-block">
+      <el-col
+        class="image-col"
+        :span="5"
+        v-for="image in myVideos"
+        :key="image.id"
+      >
+        <div class="image-card">
+          <el-image
+            class="video-image"
+            @click="openTheVideo(image.video_files[0].link)"
+            :src="image.image"
+          ></el-image>
+          <div class="overlay">
+            <span class="photographer"> {{ image.user.name }}</span>
+            <i
+              style="margin-left: 65%; margin-top: 3%"
+              class="el-icon-collection-tag"
+            ></i>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  name: "About",
+  name: "Videos",
   data() {
     return {
       myVideos: [
@@ -441,17 +461,69 @@ export default {
           ],
         },
       ],
+      searchString: "animals",
     };
+  },
+  methods: {
+    searchTheVideos() {
+      const access_token =
+        "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692";
+      axios
+        .get(
+          "https://api.pexels.com/videos/search?query=" +
+            this.searchString +
+            "&per_page=" +
+            "20",
+          {
+            headers: {
+              Authorization: `${access_token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          this.myVideos = res.data.videos;
+        });
+    },
+    openTheVideo(video) {
+      this.$router.push({ path: "/details", query: { videoURL: video } });
+
+      console.log(video);
+    },
+  },
+  mounted() {
+    this.searchTheVideos();
   },
 };
 </script>
 <style  scoped>
-.image {
+.image-col {
   margin-bottom: 2%;
 }
 
 .image-block {
   margin: 3% 0% 3% 0%;
   left: 90px;
+}
+.image-card {
+  border-radius: 2px;
+  padding: 1px;
+  box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.overlay {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.photographer {
+  line-height: 3;
+  font-size: 9px;
+  margin-left: 3px;
+  color: grey;
+}
+.video-image {
+  cursor: pointer;
 }
 </style>

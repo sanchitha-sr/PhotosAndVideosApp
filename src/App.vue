@@ -1,17 +1,25 @@
 <template>
   <div id="app">
-    <el-menu class="el-menu-main" mode="horizontal">
+    <el-menu
+      class="el-menu-main"
+      :style="{
+        'background-image': `url(${image})`,
+      }"
+      mode="horizontal"
+    >
       <div>
         <img class="logo" src="./assets/logo.png" />
       </div>
 
-      <h1>
-        <center class="my-text">
-          Discover the World's best photos and videos
-        </center>
-      </h1>
-      <h3><center class="my-text">Best Memories online</center></h3>
-      <el-form ref="form" :model="form" class="search-form">
+      <span v-if="!this.$route.name !== 'Details'"
+        ><h1>
+          <center class="my-text">
+            Discover the World's best photos and videos
+          </center>
+        </h1>
+        <h3><center class="my-text">Best Memories online</center></h3></span
+      >
+      <el-form class="search-form">
         <el-form-item>
           <el-input
             v-model="searchedString"
@@ -20,12 +28,14 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchTheImages()" type="danger">Search</el-button>
+          <el-button @click="searchForTheImages()" type="danger"
+            >Search</el-button
+          >
         </el-form-item>
       </el-form>
     </el-menu>
 
-    <div class="navigation-bar">
+    <div class="navigation-bar" v-if="this.$route.name !== 'Details'">
       <el-menu
         :default-active="activeIndex"
         class="el-menu-options"
@@ -36,7 +46,7 @@
         </el-menu-item>
 
         <el-menu-item index="2"
-          ><router-link to="/about">Videos</router-link></el-menu-item
+          ><router-link to="/Videos">Videos</router-link></el-menu-item
         >
         <el-menu-item style="float: right" class="menu-item-favorite" index="3"
           ><router-link to="/favorites">Favorite</router-link></el-menu-item
@@ -47,10 +57,12 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      src:
+      image:
         "https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
       activeIndex: "1",
       searchedString: "",
@@ -58,10 +70,32 @@ export default {
   },
   components: {},
   methods: {
-    searchTheImages() {
+    searchForTheImages() {
       console.log(this.searchedString);
-      // this.getTheImages();
+      // this.$root.$emit("string incoming", this.searchedString);
+      // this.$emit("string", this.searchedString);
+      this.$router.push({
+        path: "/",
+        query: { string: this.searchedString },
+      });
     },
+    getTheCuratedImage() {
+      const access_token =
+        "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692";
+      axios
+        .get("https://api.pexels.com/v1/curated?per_page=1", {
+          headers: {
+            Authorization: `${access_token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          this.image = res.data.photos[0].src.landscape;
+        });
+    },
+  },
+  mounted() {
+    // setInterval(this.getTheCuratedImage(), 1000 * 60 * 60);
   },
 };
 </script>
@@ -72,16 +106,21 @@ export default {
 
 .el-menu-main {
   height: 20rem;
-  background-image: url("https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200");
-}
-.el-input {
-  width: 80rem;
 }
 
 .logo {
   padding-right: 70%;
   margin-top: 2%;
   margin-left: 2%;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+}
+
+.el-input {
+  padding-right: 20em;
 }
 
 .my-text {

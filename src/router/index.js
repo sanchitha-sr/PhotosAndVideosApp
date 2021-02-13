@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import About from '../views/About.vue'
+import Videos from '../views/Videos.vue'
 import Favorites from '../views/Favorites.vue'
+import Details from '../views/Details.vue'
+
 
 
 Vue.use(VueRouter)
@@ -11,17 +13,23 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    // props: true
   },
   {
-    path: '/about',
-    name: 'About',
-    component: About
+    path: '/videos',
+    name: 'Videos',
+    component: Videos
   },
   {
     path: '/favorites',
     name: 'Favorites',
     component: Favorites
+  },
+  {
+    path: '/details',
+    name: 'Details',
+    component: Details
   }
 ]
 
