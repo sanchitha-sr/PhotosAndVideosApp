@@ -1,6 +1,6 @@
 <template>
   <div class="Videos">
-    <el-row :gutter="10" class="image-block">
+    <el-row :gutter="10" v-loading="loading" class="image-block">
       <el-col
         class="image-col"
         :span="5"
@@ -14,13 +14,22 @@
             :src="image.image"
           ></el-image>
           <div class="overlay">
-            <span class="photographer"> {{ image.user.name }}</span>
+            <span class="photographer">by {{ image.user.name }}</span>
           </div>
-          <i
+
+          <el-button
+            style="margin-left: 86%"
+            size="mini"
             @click="addToFavorite(image)"
-            style="margin-left: 90%; margin-top: 3%; cursor: pointer"
-            class="el-icon-collection-tag"
-          ></i>
+            type="danger"
+            circle
+          >
+            <i
+              class="far fa-heart fa-1x"
+              style="cursor: pointer"
+              id="el-icon-collection-tag"
+            ></i>
+          </el-button>
         </div>
       </el-col>
     </el-row>
@@ -34,441 +43,17 @@ export default {
   name: "Videos",
   data() {
     return {
-      myVideos: [
-        {
-          id: 2499611,
-          width: 1080,
-          height: 1920,
-          url: "https://www.pexels.com/video/2499611/",
-          image:
-            "https://images.pexels.com/videos/2499611/free-video-2499611.jpg?fit=crop&w=1200&h=630&auto=compress&cs=tinysrgb",
-          full_res: null,
-          tags: [],
-          duration: 22,
-          user: {
-            id: 680589,
-            name: "Joey Farina",
-            url: "https://www.pexels.com/@joey",
-          },
-          video_files: [
-            {
-              id: 125004,
-              quality: "hd",
-              file_type: "video/mp4",
-              width: 1080,
-              height: 1920,
-              link:
-                "https://player.vimeo.com/external/342571552.hd.mp4?s=6aa6f164de3812abadff3dde86d19f7a074a8a66&profile_id=175&oauth2_token_id=57447761",
-            },
-            {
-              id: 125005,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 540,
-              height: 960,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761",
-            },
-            {
-              id: 125006,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 240,
-              height: 426,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=139&oauth2_token_id=57447761",
-            },
-          ],
-          video_pictures: [
-            {
-              id: 308178,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-0.jpg",
-              nr: 0,
-            },
-            {
-              id: 308179,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-1.jpg",
-              nr: 1,
-            },
-            {
-              id: 308180,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-2.jpg",
-              nr: 2,
-            },
-            {
-              id: 308181,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-3.jpg",
-              nr: 3,
-            },
-          ],
-        },
-        {
-          id: 2499611,
-          width: 1080,
-          height: 1920,
-          url: "https://www.pexels.com/video/2499611/",
-          image:
-            "https://images.pexels.com/videos/2499611/free-video-2499611.jpg?fit=crop&w=1200&h=630&auto=compress&cs=tinysrgb",
-          full_res: null,
-          tags: [],
-          duration: 22,
-          user: {
-            id: 680589,
-            name: "Joey Farina",
-            url: "https://www.pexels.com/@joey",
-          },
-          video_files: [
-            {
-              id: 125004,
-              quality: "hd",
-              file_type: "video/mp4",
-              width: 1080,
-              height: 1920,
-              link:
-                "https://player.vimeo.com/external/342571552.hd.mp4?s=6aa6f164de3812abadff3dde86d19f7a074a8a66&profile_id=175&oauth2_token_id=57447761",
-            },
-            {
-              id: 125005,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 540,
-              height: 960,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761",
-            },
-            {
-              id: 125006,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 240,
-              height: 426,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=139&oauth2_token_id=57447761",
-            },
-          ],
-          video_pictures: [
-            {
-              id: 308178,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-0.jpg",
-              nr: 0,
-            },
-            {
-              id: 308179,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-1.jpg",
-              nr: 1,
-            },
-            {
-              id: 308180,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-2.jpg",
-              nr: 2,
-            },
-            {
-              id: 308181,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-3.jpg",
-              nr: 3,
-            },
-          ],
-        },
-        {
-          id: 2499611,
-          width: 1080,
-          height: 1920,
-          url: "https://www.pexels.com/video/2499611/",
-          image:
-            "https://images.pexels.com/videos/2499611/free-video-2499611.jpg?fit=crop&w=1200&h=630&auto=compress&cs=tinysrgb",
-          full_res: null,
-          tags: [],
-          duration: 22,
-          user: {
-            id: 680589,
-            name: "Joey Farina",
-            url: "https://www.pexels.com/@joey",
-          },
-          video_files: [
-            {
-              id: 125004,
-              quality: "hd",
-              file_type: "video/mp4",
-              width: 1080,
-              height: 1920,
-              link:
-                "https://player.vimeo.com/external/342571552.hd.mp4?s=6aa6f164de3812abadff3dde86d19f7a074a8a66&profile_id=175&oauth2_token_id=57447761",
-            },
-            {
-              id: 125005,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 540,
-              height: 960,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761",
-            },
-            {
-              id: 125006,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 240,
-              height: 426,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=139&oauth2_token_id=57447761",
-            },
-          ],
-          video_pictures: [
-            {
-              id: 308178,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-0.jpg",
-              nr: 0,
-            },
-            {
-              id: 308179,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-1.jpg",
-              nr: 1,
-            },
-            {
-              id: 308180,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-2.jpg",
-              nr: 2,
-            },
-            {
-              id: 308181,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-3.jpg",
-              nr: 3,
-            },
-          ],
-        },
-        {
-          id: 2499611,
-          width: 1080,
-          height: 1920,
-          url: "https://www.pexels.com/video/2499611/",
-          image:
-            "https://images.pexels.com/videos/2499611/free-video-2499611.jpg?fit=crop&w=1200&h=630&auto=compress&cs=tinysrgb",
-          full_res: null,
-          tags: [],
-          duration: 22,
-          user: {
-            id: 680589,
-            name: "Joey Farina",
-            url: "https://www.pexels.com/@joey",
-          },
-          video_files: [
-            {
-              id: 125004,
-              quality: "hd",
-              file_type: "video/mp4",
-              width: 1080,
-              height: 1920,
-              link:
-                "https://player.vimeo.com/external/342571552.hd.mp4?s=6aa6f164de3812abadff3dde86d19f7a074a8a66&profile_id=175&oauth2_token_id=57447761",
-            },
-            {
-              id: 125005,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 540,
-              height: 960,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761",
-            },
-            {
-              id: 125006,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 240,
-              height: 426,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=139&oauth2_token_id=57447761",
-            },
-          ],
-          video_pictures: [
-            {
-              id: 308178,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-0.jpg",
-              nr: 0,
-            },
-            {
-              id: 308179,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-1.jpg",
-              nr: 1,
-            },
-            {
-              id: 308180,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-2.jpg",
-              nr: 2,
-            },
-            {
-              id: 308181,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-3.jpg",
-              nr: 3,
-            },
-          ],
-        },
-        {
-          id: 2499611,
-          width: 1080,
-          height: 1920,
-          url: "https://www.pexels.com/video/2499611/",
-          image:
-            "https://images.pexels.com/videos/2499611/free-video-2499611.jpg?fit=crop&w=1200&h=630&auto=compress&cs=tinysrgb",
-          full_res: null,
-          tags: [],
-          duration: 22,
-          user: {
-            id: 680589,
-            name: "Joey Farina",
-            url: "https://www.pexels.com/@joey",
-          },
-          video_files: [
-            {
-              id: 125004,
-              quality: "hd",
-              file_type: "video/mp4",
-              width: 1080,
-              height: 1920,
-              link:
-                "https://player.vimeo.com/external/342571552.hd.mp4?s=6aa6f164de3812abadff3dde86d19f7a074a8a66&profile_id=175&oauth2_token_id=57447761",
-            },
-            {
-              id: 125005,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 540,
-              height: 960,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761",
-            },
-            {
-              id: 125006,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 240,
-              height: 426,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=139&oauth2_token_id=57447761",
-            },
-          ],
-          video_pictures: [
-            {
-              id: 308178,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-0.jpg",
-              nr: 0,
-            },
-            {
-              id: 308179,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-1.jpg",
-              nr: 1,
-            },
-            {
-              id: 308180,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-2.jpg",
-              nr: 2,
-            },
-            {
-              id: 308181,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-3.jpg",
-              nr: 3,
-            },
-          ],
-        },
-        {
-          id: 2499611,
-          width: 1080,
-          height: 1920,
-          url: "https://www.pexels.com/video/2499611/",
-          image:
-            "https://images.pexels.com/videos/2499611/free-video-2499611.jpg?fit=crop&w=1200&h=630&auto=compress&cs=tinysrgb",
-          full_res: null,
-          tags: [],
-          duration: 22,
-          user: {
-            id: 680589,
-            name: "Joey Farina",
-            url: "https://www.pexels.com/@joey",
-          },
-          video_files: [
-            {
-              id: 125004,
-              quality: "hd",
-              file_type: "video/mp4",
-              width: 1080,
-              height: 1920,
-              link:
-                "https://player.vimeo.com/external/342571552.hd.mp4?s=6aa6f164de3812abadff3dde86d19f7a074a8a66&profile_id=175&oauth2_token_id=57447761",
-            },
-            {
-              id: 125005,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 540,
-              height: 960,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=165&oauth2_token_id=57447761",
-            },
-            {
-              id: 125006,
-              quality: "sd",
-              file_type: "video/mp4",
-              width: 240,
-              height: 426,
-              link:
-                "https://player.vimeo.com/external/342571552.sd.mp4?s=e0df43853c25598dfd0ec4d3f413bce1e002deef&profile_id=139&oauth2_token_id=57447761",
-            },
-          ],
-          video_pictures: [
-            {
-              id: 308178,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-0.jpg",
-              nr: 0,
-            },
-            {
-              id: 308179,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-1.jpg",
-              nr: 1,
-            },
-            {
-              id: 308180,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-2.jpg",
-              nr: 2,
-            },
-            {
-              id: 308181,
-              picture:
-                "https://static-videos.pexels.com/videos/2499611/pictures/preview-3.jpg",
-              nr: 3,
-            },
-          ],
-        },
-      ],
+      myVideos: [],
+      loading: true,
       searchString: "animals",
     };
   },
   methods: {
     searchTheVideos() {
+      this.searchString = this.$store.state.searchString;
+
       const access_token =
-        "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692";
+        "563492ad6f91700001000001c3a04a4f60c34d5da52f1b4a9caf7c21";
       axios
         .get(
           "https://api.pexels.com/videos/search?query=" +
@@ -484,12 +69,18 @@ export default {
         .then((res) => {
           console.log(res);
           this.myVideos = res.data.videos;
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
         });
     },
-    addToFavorite() {
+    addToFavorite(item) {
       // this.$store.state.favorites.push(item);
       // console.log(this.$store.state);
-      // this.$store.commit("addToFavorites", item);
+      this.$store.commit("addToFavoriteVideos", item);
+      console.log(this.$store.state.favoriteVideos);
     },
     openTheVideo(video) {
       this.$router.push({ path: "/details", query: { videoURL: video } });
@@ -499,6 +90,11 @@ export default {
   },
   mounted() {
     this.searchTheVideos();
+  },
+  created() {
+    this.$root.$on("fireMethod", () => {
+      this.searchTheVideos();
+    });
   },
 };
 </script>

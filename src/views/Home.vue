@@ -5,11 +5,12 @@
         class="image-col"
         :span="5"
         v-for="image in myImages"
+        v-loading="loading"
         :key="image.id"
       >
         <div class="image-card">
           <el-image
-            @click="openTheImage(image.src.landscape)"
+            @click="openTheImage(image)"
             class="image"
             :src="image.src.landscape"
           >
@@ -17,11 +18,19 @@
           <div class="overlay">
             <span class="photographer"> by {{ image.photographer }}</span>
           </div>
-          <i
+          <el-button
+            style="margin-left: 86%"
+            size="mini"
             @click="addToFavorite(image)"
-            style="margin-left: 90%; margin-top: 3%; cursor: pointer"
-            class="el-icon-collection-tag"
-          ></i>
+            type="danger"
+            circle
+          >
+            <i
+              class="far fa-heart fa-1x"
+              style="cursor: pointer"
+              id="el-icon-collection-tag"
+            ></i>
+          </el-button>
         </div>
       </el-col>
     </el-row>
@@ -240,23 +249,25 @@ export default {
           },
         },
       ],
-      searchString:
-        this.getTheSearchString === undefined
-          ? "animals"
-          : this.getTheSearchString,
+      favoriteFlag: false,
+      loading: true,
+      searchString: this.$store.state.searchString,
     };
   },
+
   name: "Home",
 
   methods: {
     searchTheImages() {
+      this.searchString = this.$store.state.searchString;
       const url =
         "https://api.pexels.com/v1/search?query=" +
         this.searchString +
         "&per_page=" +
         20;
       const access_token =
-        "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692";
+        "563492ad6f91700001000001c3a04a4f60c34d5da52f1b4a9caf7c21";
+
       axios
         .get(url, {
           headers: {
@@ -266,26 +277,42 @@ export default {
         .then((res) => {
           console.log(res);
           this.myImages = res.data.photos;
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
         });
     },
     openTheImage(image) {
       console.log(image);
-      this.$router.push({ path: "/details", query: { image: image } });
+      this.$router.push({
+        path: "/details",
+        query: { image: image.src, photographer: image.photographer },
+      });
     },
     addToFavorite(item) {
       // this.$store.state.favorites.push(item);
       this.$store.commit("addToFavorites", item);
       console.log(this.$store.state);
+      this.favoriteFlag = true;
     },
   },
   computed: {
     getTheSearchString() {
-      return this.$route.query.string;
+      return this.$store.state.searchString;
     },
   },
   mounted() {
     this.searchTheImages();
     console.log(this.$route);
+    console.log("Home" + this.$store.state.searchString);
+    console.log(this.getTheSearchString);
+  },
+  created() {
+    this.$root.$on("fireMethod", () => {
+      this.searchTheImages();
+    });
   },
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <el-menu
+      v-if="!navigationBarSelect"
       class="el-menu-main"
       :style="{
         'background-image': `url(${image})`,
@@ -11,7 +12,7 @@
         <img class="logo" src="./assets/logo.png" />
       </div>
 
-      <span v-if="!this.$route.name !== 'Details'"
+      <span v-if="this.$route.name !== 'Details'"
         ><h1>
           <center class="my-text">
             Discover the World's best photos and videos
@@ -19,6 +20,31 @@
         </h1>
         <h3><center class="my-text">Best Memories online</center></h3></span
       >
+      <el-form class="search-form">
+        <el-form-item>
+          <el-input
+            v-model="searchedString"
+            class="el-input"
+            placeholder="Search photos, videos, artists"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="searchForTheImages()" type="danger"
+            >Search</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-menu>
+
+    <el-menu
+      v-if="navigationBarSelect"
+      style="height: 150px; background-color: #f3f3f3"
+      mode="horizontal"
+    >
+      <div>
+        <img class="logo" src="./assets/Logo-scroll.png" />
+      </div>
+
       <el-form class="search-form">
         <el-form-item>
           <el-input
@@ -69,19 +95,20 @@ export default {
     };
   },
   components: {},
+  computed: {
+    navigationBarSelect() {
+      return this.$route.name === "Details";
+    },
+  },
   methods: {
     searchForTheImages() {
-      console.log(this.searchedString);
-      // this.$root.$emit("string incoming", this.searchedString);
-      // this.$emit("string", this.searchedString);
-      this.$router.push({
-        path: "/",
-        query: { string: this.searchedString },
-      });
+      this.$store.state.searchString = this.searchedString;
+      console.log();
+      this.$root.$emit("fireMethod");
     },
     getTheCuratedImage() {
       const access_token =
-        "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692";
+        "563492ad6f91700001000001c3a04a4f60c34d5da52f1b4a9caf7c21";
       axios
         .get("https://api.pexels.com/v1/curated", {
           headers: {

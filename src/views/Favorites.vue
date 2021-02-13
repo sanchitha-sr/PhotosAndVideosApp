@@ -14,9 +14,45 @@
             :src="image.src.landscape"
           >
           </el-image>
+
           <div class="overlay">
             <span class="photographer"> {{ image.photographer }}</span>
           </div>
+          <i
+            @click="removeFromFavorite(image)"
+            style="margin-left: 90%; margin-top: 3%; cursor: pointer"
+            class="el-icon-collection-tag"
+          ></i>
+        </div>
+      </el-col>
+      <el-col
+        class="image-col"
+        :span="5"
+        v-for="image in favoriteVideos"
+        :key="image.id"
+      >
+        <div class="image-card">
+          <el-image
+            class="video-image"
+            @click="openTheVideo(image.video_files[0].link)"
+            :src="image.image"
+          ></el-image>
+          <div class="overlay">
+            <span class="photographer">by {{ image.user.name }}</span>
+          </div>
+          <el-button
+            style="margin-left: 86%"
+            size="mini"
+            @click="addToFavorite(image)"
+            type="danger"
+            circle
+          >
+            <i
+              class="far fa-heart fa-1x"
+              style="cursor: pointer"
+              id="el-icon-collection-tag"
+            ></i>
+          </el-button>
         </div>
       </el-col>
     </el-row>
@@ -29,6 +65,9 @@ export default {
   computed: {
     favorites() {
       return this.$store.state.favorites;
+    },
+    favoriteVideos() {
+      return this.$store.state.favoriteVideos;
     },
   },
   data() {
