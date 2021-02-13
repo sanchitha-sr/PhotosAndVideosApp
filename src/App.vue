@@ -83,7 +83,7 @@ export default {
       const access_token =
         "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692";
       axios
-        .get("https://api.pexels.com/v1/curated?per_page=1", {
+        .get("https://api.pexels.com/v1/curated", {
           headers: {
             Authorization: `${access_token}`,
           },
@@ -95,7 +95,7 @@ export default {
     },
   },
   mounted() {
-    // setInterval(this.getTheCuratedImage(), 1000 * 60 * 60);
+    setInterval(this.getTheCuratedImage(), 1000 * 60 * 60);
   },
 };
 </script>

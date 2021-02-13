@@ -15,11 +15,12 @@
           ></el-image>
           <div class="overlay">
             <span class="photographer"> {{ image.user.name }}</span>
-            <i
-              style="margin-left: 65%; margin-top: 3%"
-              class="el-icon-collection-tag"
-            ></i>
           </div>
+          <i
+            @click="addToFavorite(image)"
+            style="margin-left: 90%; margin-top: 3%; cursor: pointer"
+            class="el-icon-collection-tag"
+          ></i>
         </div>
       </el-col>
     </el-row>
@@ -484,6 +485,11 @@ export default {
           console.log(res);
           this.myVideos = res.data.videos;
         });
+    },
+    addToFavorite() {
+      // this.$store.state.favorites.push(item);
+      // console.log(this.$store.state);
+      // this.$store.commit("addToFavorites", item);
     },
     openTheVideo(video) {
       this.$router.push({ path: "/details", query: { videoURL: video } });

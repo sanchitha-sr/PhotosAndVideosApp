@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    {{ string }}
     <el-row :gutter="10" class="image-block">
       <el-col
         class="image-col"
@@ -16,8 +15,13 @@
           >
           </el-image>
           <div class="overlay">
-            <span class="photographer"> {{ image.photographer }}</span>
+            <span class="photographer"> by {{ image.photographer }}</span>
           </div>
+          <i
+            @click="addToFavorite(image)"
+            style="margin-left: 90%; margin-top: 3%; cursor: pointer"
+            class="el-icon-collection-tag"
+          ></i>
         </div>
       </el-col>
     </el-row>
@@ -267,6 +271,11 @@ export default {
     openTheImage(image) {
       console.log(image);
       this.$router.push({ path: "/details", query: { image: image } });
+    },
+    addToFavorite(item) {
+      // this.$store.state.favorites.push(item);
+      this.$store.commit("addToFavorites", item);
+      console.log(this.$store.state);
     },
   },
   computed: {
