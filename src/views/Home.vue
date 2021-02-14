@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" id="home">
     <el-row :gutter="10" class="image-block">
       <el-col
         class="image-col"
@@ -252,6 +252,7 @@ export default {
       favoriteFlag: false,
       loading: true,
       searchString: this.$store.state.searchString,
+      page: 1,
     };
   },
 
@@ -264,9 +265,10 @@ export default {
         "https://api.pexels.com/v1/search?query=" +
         this.searchString +
         "&per_page=" +
-        20;
-      const access_token =
-        "563492ad6f91700001000001c3a04a4f60c34d5da52f1b4a9caf7c21";
+        20 +
+        "&page=" +
+        this.page;
+      const access_token = this.$store.state.accessToken;
 
       axios
         .get(url, {
@@ -291,6 +293,11 @@ export default {
         query: { image: image.src, photographer: image.photographer },
       });
     },
+    scrolled(e) {
+      window.addEventListener("scroll", function () {
+        console.log(e);
+      });
+    },
     addToFavorite(item) {
       // this.$store.state.favorites.push(item);
       this.$store.commit("addToFavorites", item);
@@ -313,6 +320,7 @@ export default {
     this.$root.$on("fireMethod", () => {
       this.searchTheImages();
     });
+    this.scrolled();
   },
 };
 </script>

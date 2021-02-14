@@ -107,8 +107,7 @@ export default {
       this.$root.$emit("fireMethod");
     },
     getTheCuratedImage() {
-      const access_token =
-        "563492ad6f91700001000001c3a04a4f60c34d5da52f1b4a9caf7c21";
+      const access_token = this.$store.state.accessToken;
       axios
         .get("https://api.pexels.com/v1/curated", {
           headers: {

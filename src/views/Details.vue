@@ -35,7 +35,7 @@
         <el-image :src="detailedImage"> </el-image>
       </div>
     </el-card>
-    <el-card>
+    <el-card v-if="detailedVideo">
       <div slot="header" class="clearfix">
         <div class="text-block">
           <span class="icons">

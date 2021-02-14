@@ -11,7 +11,7 @@ export const store = new Vuex.Store({
         ],
         favoriteVideos: [],
         searchString: "animals",
-        accessToken: ""
+        accessToken: "563492ad6f917000010000014060d806c66c47b88b9b4d7f8c487692"
     },
     getters: {
 
