@@ -253,6 +253,9 @@ export default {
       loading: true,
       searchString: this.$store.state.searchString,
       page: 1,
+      numberOfItems: 20,
+      last_known_scroll_position: 0,
+      ticking: false,
     };
   },
 
@@ -265,7 +268,7 @@ export default {
         "https://api.pexels.com/v1/search?query=" +
         this.searchString +
         "&per_page=" +
-        20 +
+        this.numberOfItems +
         "&page=" +
         this.page;
       const access_token = this.$store.state.accessToken;
@@ -293,10 +296,8 @@ export default {
         query: { image: image.src, photographer: image.photographer },
       });
     },
-    scrolled(e) {
-      window.addEventListener("scroll", function () {
-        console.log(e);
-      });
+    scrolled() {
+      console.log(window.scrollY);
     },
     addToFavorite(item) {
       // this.$store.state.favorites.push(item);
@@ -320,7 +321,7 @@ export default {
     this.$root.$on("fireMethod", () => {
       this.searchTheImages();
     });
-    this.scrolled();
+    window.addEventListener("scroll", this.scrolled);
   },
 };
 </script>

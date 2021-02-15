@@ -67,15 +67,16 @@
         class="el-menu-options"
         mode="horizontal"
       >
-        <el-menu-item index="1"
-          ><router-link to="/">Photos</router-link>
-        </el-menu-item>
+        <el-menu-item @click="routeToHome()" index="1">Photos </el-menu-item>
 
-        <el-menu-item index="2"
-          ><router-link to="/Videos">Videos</router-link></el-menu-item
-        >
-        <el-menu-item style="float: right" class="menu-item-favorite" index="3"
-          ><router-link to="/favorites">Favorite</router-link></el-menu-item
+        <el-menu-item @click="routeToVideos()" index="2">Videos</el-menu-item>
+
+        <el-menu-item
+          @click="routeToFavorites()"
+          style="float: right"
+          class="menu-item-favorite"
+          index="3"
+          >Favorite</el-menu-item
         >
       </el-menu>
     </div>
@@ -90,7 +91,7 @@ export default {
     return {
       image:
         "https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-      activeIndex: "1",
+      activeIndex: 1,
       searchedString: "",
     };
   },
@@ -105,6 +106,7 @@ export default {
       this.$store.state.searchString = this.searchedString;
       console.log();
       this.$root.$emit("fireMethod");
+      this.routeToHome();
     },
     getTheCuratedImage() {
       const access_token = this.$store.state.accessToken;
@@ -118,6 +120,24 @@ export default {
           console.log(res);
           this.image = res.data.photos[0].src.landscape;
         });
+    },
+    routeToHome() {
+      this.activeIndex = 1;
+      this.$router.push({
+        path: "/",
+      });
+    },
+    routeToVideos() {
+      this.activeIndex = 2;
+      this.$router.push({
+        path: "/videos",
+      });
+    },
+    routeToFavorites() {
+      this.activeIndex = 3;
+      this.$router.push({
+        path: "/favorites",
+      });
     },
   },
   mounted() {
