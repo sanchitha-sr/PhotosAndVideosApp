@@ -31,11 +31,11 @@
           </span>
         </div>
       </div>
-      <div class="container">
+      <div v-loading="loading" class="container">
         <el-image :src="detailedImage"> </el-image>
       </div>
     </el-card>
-    <el-card v-if="detailedVideo">
+    <el-card v-if="this.$route.query.video">
       <div slot="header" class="clearfix">
         <div class="text-block">
           <span class="icons">
@@ -53,7 +53,7 @@
           </span>
         </div>
       </div>
-      <video width="70%" controls>
+      <video v-loading="loading" width="70%" controls>
         <source :src="detailedVideo" type="video/mp4" />
         <source :src="detailedVideo" type="video/ogg" />
         Your browser does not support HTML video.
@@ -64,16 +64,19 @@
 
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      photographer: this.$route.query.photographer,
+      photographer: "",
       favoriteFlag: false,
-      detailedImage: this.$route.query.image
-        ? this.$route.query.image.large
-        : "",
-      detailedVideo: this.$route.query.videoURL,
+      detailedImage: "",
+      detailedVideo: this.$route.query.video.video_files[1].link,
       videoGragher: this.$route.query.photographer,
+      imageObj: Object,
+      videoObj: Object,
+      loading: true,
     };
   },
   methods: {
@@ -82,15 +85,69 @@ export default {
       // this.$store.commit("addToFavorites", item);
     },
     zoomIn() {
-      this.detailedImage = this.$route.query.image.original;
+      this.detailedImage = this.imageObj.src.original;
     },
     zoomOut() {
-      this.detailedImage = this.$route.query.image.medium;
+      this.detailedImage = this.imageObj.src.medium;
+    },
+    getThePhoto() {
+      const url = "https://api.pexels.com/v1/photos/" + this.$route.query.image;
+      const access_token = this.$store.state.accessToken;
+
+      axios
+        .get(url, {
+          headers: {
+            Authorization: `${access_token}`,
+          },
+        })
+        .then((res) => {
+          this.imageObj = res.data;
+          this.photographer = this.imageObj.photographer;
+          console.log(res.data);
+
+          this.detailedImage = this.imageObj.src.large;
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
+        });
+    },
+    getTheVideo() {
+      const url =
+        "https://api.pexels.com/videos/videos/" + this.$route.query.video;
+      const access_token = this.$store.state.accessToken;
+
+      axios
+        .get(url, {
+          headers: {
+            Authorization: `${access_token}`,
+          },
+        })
+        .then((res) => {
+          this.videoObj = res.data;
+          this.photographer = this.videoObj.photographer;
+
+          this.detailedVideo = res.data.video_files[1].link;
+          console.log(this.detailedVideo.toString());
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          this.loading = false;
+        });
     },
   },
   computed: {},
   mounted() {
     console.log(this.$route);
+    console.log(this.$route.query.video);
+    if (this.$route.query.image) {
+      this.getThePhoto();
+    }
+    // else if (this.$route.query.video) {
+    //   this.getTheVideo();
+    // }
   },
   name: "Details",
 };
@@ -122,7 +179,7 @@ export default {
 }
 
 .icons {
-  padding-left: 50rem;
+  padding-left: 0rem;
 }
 </style>
 

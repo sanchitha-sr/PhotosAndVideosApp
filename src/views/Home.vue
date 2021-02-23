@@ -293,7 +293,7 @@ export default {
       console.log(image);
       this.$router.push({
         path: "/details",
-        query: { image: image.src, photographer: image.photographer },
+        query: { image: image.id },
       });
     },
     scrolled() {
@@ -321,7 +321,7 @@ export default {
     this.$root.$on("fireMethod", () => {
       this.searchTheImages();
     });
-    window.addEventListener("scroll", this.scrolled);
+    // window.addEventListener("scroll", this.scrolled);
   },
 };
 </script>

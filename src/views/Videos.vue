@@ -85,8 +85,7 @@ export default {
       this.$router.push({
         path: "/details",
         query: {
-          videoURL: video.video_files[1].link,
-          photographer: video.user.name,
+          video: video.id,
         },
       });
 
