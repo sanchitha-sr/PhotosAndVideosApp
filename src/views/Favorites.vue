@@ -33,6 +33,14 @@
         :key="image.id"
       >
         <div class="image-card">
+          <div class="play-icon-container">
+            <el-button
+              circle
+              class="play-icon"
+              @click="openTheVideo(image)"
+              icon="el-icon-video-play"
+            ></el-button>
+          </div>
           <el-image
             class="video-image"
             @click="openTheVideo(image.video_files[0].link)"
@@ -82,7 +90,9 @@ export default {
       favoriteItems: [],
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.favoriteItems);
+  },
   methods: {
     removeFromFavorite(item) {
       this.$store.commit("removeFromFavorites", item);
@@ -121,6 +131,18 @@ export default {
 
 .image:hover {
   cursor: pointer;
+}
+
+.play-icon-container {
+  display: flex;
+  justify-content: center;
+}
+
+.play-icon {
+  position: absolute;
+  z-index: 2;
+  margin-top: 3%;
+  opacity: 0.6;
 }
 </style>
 

@@ -8,11 +8,20 @@
         :key="image.id"
       >
         <div class="image-card">
+          <div class="play-icon-container">
+            <el-button
+              circle
+              @click="openTheVideo(image)"
+              class="play-icon"
+              icon="el-icon-video-play"
+            ></el-button>
+          </div>
           <el-image
             class="video-image"
             @click="openTheVideo(image)"
             :src="image.image"
           ></el-image>
+
           <div class="overlay">
             <span class="photographer">by {{ image.user.name }}</span>
           </div>
@@ -131,5 +140,18 @@ export default {
 }
 .video-image {
   cursor: pointer;
+  position: relative;
+}
+
+.play-icon-container {
+  display: flex;
+  justify-content: center;
+}
+
+.play-icon {
+  position: absolute;
+  z-index: 2;
+  margin-top: 3%;
+  opacity: 0.6;
 }
 </style>

@@ -103,7 +103,9 @@ export default {
   },
   methods: {
     searchForTheImages() {
-      this.$store.state.searchString = this.searchedString;
+      this.$store.state.searchString = this.searchedString
+        ? this.searchedString
+        : "animals";
       console.log();
       this.$root.$emit("fireMethod");
       this.routeToHome();
