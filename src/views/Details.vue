@@ -2,10 +2,17 @@
   <div class="details">
     <el-card v-if="this.$route.query.image">
       <div slot="header" class="clearfix">
-        <div class="text-block">
+        <span class="photographer">
+          <el-avatar size="small" icon="el-icon-user-solid"></el-avatar>
+          <span style="padding-left: 6px; line-height: 2">{{
+            photographer
+          }}</span>
+        </span>
+
+        <div class="icon-block">
           <span class="icons">
             <el-button
-              @click="addToFavorite(image)"
+              @click="addToFavorite(imageObj)"
               :disabled="favoriteFlag"
               type="danger"
             >
@@ -23,41 +30,42 @@
               </el-button-group>
             </span>
           </span>
-          <span class="photographer">
-            <el-avatar size="small" icon="el-icon-user-solid"></el-avatar>
-            <span style="padding-left: 6px; line-height: 2">{{
-              photographer
-            }}</span>
-          </span>
         </div>
       </div>
-      <div v-loading="loading" class="container">
-        <el-image :src="detailedImage"> </el-image>
+      <div v-loading="loading" class="image-container">
+        <el-image class="image" :src="detailedImage"> </el-image>
       </div>
     </el-card>
-    <el-card v-if="this.$route.query.video">
+    <el-card v-else>
       <div slot="header" class="clearfix">
-        <div class="text-block">
+        <span class="photographer">
+          <el-avatar size="small" icon="el-icon-user-solid"></el-avatar>
+          <span style="padding-left: 6px; line-height: 2">{{
+            photographer
+          }}</span>
+        </span>
+
+        <div class="icon-block">
           <span class="icons">
-            <el-button :disabled="favoriteFlag" type="danger">
+            <el-button
+              @click="addToFavorite(videoObj)"
+              :disabled="favoriteFlag"
+              type="danger"
+            >
               <i class="far fa-heart fa-1x"></i
             ></el-button>
-
-            <span class="zoom-icons"> </span>
-          </span>
-          <span class="photographer">
-            <el-avatar size="small" icon="el-icon-user-solid"></el-avatar>
-            <span style="padding-left: 6px; line-height: 2">{{
-              videoGragher
-            }}</span>
           </span>
         </div>
       </div>
-      <video v-loading="loading" width="70%" controls>
-        <source :src="detailedVideo" type="video/mp4" />
-        <source :src="detailedVideo" type="video/ogg" />
-        Your browser does not support HTML video.
-      </video>
+      <div v-loading="loading" class="image-container">
+        <video
+          ref="videoRef"
+          :src="detailedVideo"
+          id="video-container"
+          width="60%"
+          controls
+        ></video>
+      </div>
     </el-card>
   </div>
 </template>
@@ -72,17 +80,18 @@ export default {
       photographer: "",
       favoriteFlag: false,
       detailedImage: "",
-      detailedVideo: this.$route.query.video.video_files[1].link,
-      videoGragher: this.$route.query.photographer,
+      detailedVideo: "",
+      // videoGragher: this.$route.query.photographer,
       imageObj: Object,
       videoObj: Object,
       loading: true,
     };
   },
   methods: {
-    addToFavorite() {
+    addToFavorite(item) {
       this.favoriteFlag = true;
-      // this.$store.commit("addToFavorites", item);
+      console.log(item);
+      this.$store.commit("addToFavorites", item);
     },
     zoomIn() {
       this.detailedImage = this.imageObj.src.original;
@@ -126,9 +135,9 @@ export default {
         })
         .then((res) => {
           this.videoObj = res.data;
-          this.photographer = this.videoObj.photographer;
+          this.photographer = this.videoObj.user.name;
 
-          this.detailedVideo = res.data.video_files[1].link;
+          this.detailedVideo = res.data.video_files[2].link;
           console.log(this.detailedVideo.toString());
           this.loading = false;
         })
@@ -141,45 +150,40 @@ export default {
   computed: {},
   mounted() {
     console.log(this.$route);
-    console.log(this.$route.query.video);
+    // console.log(this.$route.query.video);
     if (this.$route.query.image) {
       this.getThePhoto();
+    } else {
+      this.getTheVideo();
     }
-    // else if (this.$route.query.video) {
-    //   this.getTheVideo();
-    // }
   },
   name: "Details",
 };
 </script>
 <style scoped>
-.text-block {
-  z-index: 1;
-}
-
 .clearfix {
-  height: 20px;
-}
-
-.details {
-  text-align: center;
+  height: 65px;
 }
 
 .photographer {
-  display: flex;
-  flex-direction: row;
-  padding-top: 2%;
+  line-height: 1;
+}
+
+.icons {
+}
+
+.image-container {
+  text-align: center;
+}
+
+.icon-block {
+  text-align: right;
 }
 
 .zoom-icons {
 }
 
-.zoom-icons:hover {
-  cursor: pointer;
-}
-
-.icons {
-  padding-left: 0rem;
+.image {
 }
 </style>
 
